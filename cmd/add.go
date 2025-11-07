@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 	"os"
 	"strings"
+	"slices"
 )
 
 var addCmd = &cobra.Command{
@@ -16,11 +17,25 @@ var addCmd = &cobra.Command{
 	Short: `Append item
 		- Single Item: task add [item]
 		- Multiple Item: task add [item], [item]....`,
-	Long: `Add item to currnet list`,
+	Long: `Append item to current list`,
 	Run: func(cmd *cobra.Command, args []string) {
+	
+		var data_processed string 
+		var data []string
 		
-		data_processed := strings.Join(args, "")
-		data := strings.Split(data_processed, ",")
+		// To serve multiple items
+		if slices.Contains(args, ","){
+
+			data_processed = strings.Join(args, "")
+			data = strings.Split(data_processed, ",")
+		
+		// TO serve a single item
+		}else if !slices.Contains(args, ","){
+
+			data_processed = strings.Join(args, " ")
+			data = append(data, data_processed)
+
+		}
 
 		// Create file if doesn't exist
 		if _, err := os.Stat("./test.txt"); err != nil {
@@ -36,8 +51,9 @@ var addCmd = &cobra.Command{
 	╔════════════════════╗
 	║    TASK MANAGER    ║
 	╚════════════════════╝
-══════════════════════════
+══════════════════════════════════════
 			`))
+			file.WriteString("\n")
 		
 			// Close file
 			file.Close()
@@ -68,6 +84,8 @@ var addCmd = &cobra.Command{
 		}
 
 		fmt.Println("Task(s) added")
+
+		// Close file (defer)
 		return 
 
 	},

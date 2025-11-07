@@ -1,7 +1,3 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
@@ -10,21 +6,22 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// displayCmd represents the display command
 var displayCmd = &cobra.Command{
 	Use:   "display",
 	Short: "displays current tasks",
 	Long: `displays current tasks`,
 	Run: func(cmd *cobra.Command, args []string) {
-
-		// Checks if file has anything
+		
+		// Checks if file exists
 		if _, err := os.Stat("./test.txt"); err != nil {
 			fmt.Println("No tasks to display.")	
 			return
 		}
 		
+		// Reads the file contents
 		data, err := os.ReadFile("./test.txt")
 		
+		// Error handling for read file
 		if err != nil {
 			fmt.Println("Something went wrong reading the file, please try again.")
 			return 

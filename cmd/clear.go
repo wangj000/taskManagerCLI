@@ -1,7 +1,3 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
@@ -13,8 +9,8 @@ import (
 // clearCmd represents the clear command
 var clearCmd = &cobra.Command{
 	Use:   "clear",
-	Short: "To clear all existing tasks",
-	Long: `To clear all existing tasks`,
+	Short: "Clear all existing tasks",
+	Long: `Clear all existing tasks`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("clear called")
 	},

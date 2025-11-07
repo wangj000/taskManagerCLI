@@ -1,7 +1,3 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
@@ -9,7 +5,6 @@ import (
 	"github.com/spf13/cobra"
 	"os"
 	"strings"
-	"slices"
 )
 
 var addCmd = &cobra.Command{
@@ -20,20 +15,19 @@ var addCmd = &cobra.Command{
 	Long: `Append item to current list`,
 	Run: func(cmd *cobra.Command, args []string) {
 	
-		var data_processed string 
 		var data []string
 		
 		// To serve multiple items
-		if slices.Contains(args, ","){
+		if strings.Contains(strings.Join(args, ""), ","){
 
-			data_processed = strings.Join(args, "")
-			data = strings.Split(data_processed, ",")
+			data_processed := strings.Join(args, "")
+			new_data_list := strings.Split(data_processed, ",")
+			data = new_data_list 
 		
 		// TO serve a single item
-		}else if !slices.Contains(args, ","){
-
-			data_processed = strings.Join(args, " ")
-			data = append(data, data_processed)
+		}else if !strings.Contains(strings.Join(args, ""), ","){
+			
+			data = append(data, strings.Join(args, " "))
 
 		}
 

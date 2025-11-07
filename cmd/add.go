@@ -8,44 +8,67 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"os"
-	// "strings"
+	"strings"
 )
 
 var addCmd = &cobra.Command{
 	Use:   "add",
-	Short: "Add item to current list",
+	Short: `Append item
+		- Single Item: task add [item]
+		- Multiple Item: task add [item], [item]....`,
 	Long: `Add item to currnet list`,
 	Run: func(cmd *cobra.Command, args []string) {
-	
-		// Create file if doesn't exist
-		filePath, err := os.Create("./test.txt")
 		
+		data_processed := strings.Join(args, "")
+		data := strings.Split(data_processed, ",")
+
+		// Create file if doesn't exist
+		if _, err := os.Stat("./test.txt"); err != nil {
+			
+			// Create txt for task storage
+			os.Create("./test.txt")
+			
+			// Open file for change
+			file, _ := os.OpenFile("./test.txt", os.O_APPEND | os.O_CREATE | os.O_WRONLY, 0644)
+			
+			// Add task interface header
+			file.WriteString(fmt.Sprintf(`
+	╔════════════════════╗
+	║    TASK MANAGER    ║
+	╚════════════════════╝
+══════════════════════════
+			`))
+		
+			// Close file
+			file.Close()
+
+		}
+
+		// Open file
+		file, err := os.OpenFile("./test.txt", os.O_APPEND | os.O_CREATE | os.O_WRONLY, 0644)
+		
+		// Close after func
+		defer file.Close()
+
 		// Error handling for file creation
 		if err != nil {
 			fmt.Println("Failed to create file")
 			return
 		}
 		
-		defer filePath.Close()
-		
-		// Add todo items to list
-		// data := make([]byte, 0)
-		//
-		// for _, task := range args{
-		// 	data = append(data, []byte(task)...)
-		// }
-		
-		for _, value := range args{
-			_, err := filePath.WriteString(fmt.Sprintf("- %v", value)) 
-
+		// Write todo's to file
+		for _, value := range data{
+			_, err := file.WriteString(fmt.Sprintf("- %v \n", value)) 
+			
 			if err != nil {
-				fmt.Println("Failed to add a task")
-				return 
+				fmt.Println("Something went wrong please try again.")
+				return
 			}
 
 		}
 
 		fmt.Println("Task(s) added")
+		return 
 
 	},
 }

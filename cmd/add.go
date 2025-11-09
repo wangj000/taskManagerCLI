@@ -18,7 +18,7 @@ var addCmd = &cobra.Command{
 	Long: `Append item to current list`,
 	Run: func(cmd *cobra.Command, args []string) {
 		
-		// Seperating multiple tasks by delimiter
+		// Data processing
 		processed_string := strings.Join(args, "")
 		processed_data := strings.Split(processed_string, ",")
 
@@ -27,9 +27,7 @@ var addCmd = &cobra.Command{
 
 		// Open file / Close File
 		file, err := os.OpenFile(path, os.O_WRONLY | os.O_APPEND, 0644)
-
 		defer file.Close()
-
 		if err != nil {
 			fmt.Println("Something went wrong reading the file, please try again")
 			return 
@@ -47,7 +45,6 @@ var addCmd = &cobra.Command{
 		}
 
 		err = writer.WriteAll(records)		
-
 		fmt.Println("Task(s) added")
 		return 
 

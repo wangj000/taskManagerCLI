@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"os"
 	"github.com/spf13/cobra"
+	"io"
+	"encoding/csv"
+	"path/filepath"	
 )
 
 var displayCmd = &cobra.Command{
@@ -12,22 +15,45 @@ var displayCmd = &cobra.Command{
 	Long: `displays current tasks`,
 	Run: func(cmd *cobra.Command, args []string) {
 		
+		path := filepath.Join("internal", "todos.csv")
+
 		// Checks if file exists
-		if _, err := os.Stat("./test.txt"); err != nil {
-			fmt.Println("No tasks to display.")	
+		if _, err := os.Stat(path); err != nil {
+			fmt.Println("No tasks to display, try adding a task.")	
 			return
 		}
 		
-		// Reads the file contents
-		data, err := os.ReadFile("./test.txt")
-		
-		// Error handling for read file
-		if err != nil {
-			fmt.Println("Something went wrong reading the file, please try again.")
-			return 
+		// Opening the file
+		file, err := os.Open(path)
+		if err != nil{
+			fmt.Println("Something went wrong opening the file, please try again.")
+			return
 		}
+		defer file.Close()
+		
+		// BUG: I think the bug is triggering here, because something is going on with the reader
+		reader := csv.NewReader(file)
+		for {
 
-		fmt.Println(string(data))
+			record, err := reader.Read()
+
+			if err == io.EOF {
+				break
+			}
+
+			if err != nil {
+				fmt.Printf("%v second print - Something went wrong reading the file, please try again", err)
+				return
+			}
+			
+			for _, item := range record {
+				fmt.Printf(item + " ")
+			}
+
+			fmt.Println("\n")
+
+		}
+		
 		return 
 
 	},

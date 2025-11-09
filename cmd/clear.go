@@ -2,17 +2,29 @@ package cmd
 
 import (
 	"fmt"
-
+	"os"
 	"github.com/spf13/cobra"
+	"path/filepath"
 )
 
 // clearCmd represents the clear command
 var clearCmd = &cobra.Command{
 	Use:   "clear",
-	Short: "Clear all existing tasks",
-	Long: `Clear all existing tasks`,
+	Short: "Clear all tasks",
+	Long: `Clear all tasks`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("clear called")
+		
+		path := filepath.Join("internal", "todos.csv")
+		err := os.Remove(path)	
+
+		if err != nil{
+			fmt.Println("Failed to clear tasks, please try again")
+			return
+		}
+
+		fmt.Println("Tasks cleared")
+		return
+
 	},
 }
 

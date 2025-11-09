@@ -3,8 +3,11 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"os"
+	creator "github.com/wangj000/task/internal"
 	"strings"
+	// "strconv"
+	"os"
+	"encoding/csv"
 )
 
 var addCmd = &cobra.Command{
@@ -14,72 +17,38 @@ var addCmd = &cobra.Command{
 		- Multiple Item: task add [item], [item]....`,
 	Long: `Append item to current list`,
 	Run: func(cmd *cobra.Command, args []string) {
-	
-		var data []string
 		
-		// To serve multiple items
-		if strings.Contains(strings.Join(args, ""), ","){
+		// Seperating multiple tasks by delimiter
+		processed_string := strings.Join(args, "")
+		processed_data := strings.Split(processed_string, ",")
 
-			data_processed := strings.Join(args, "")
-			new_data_list := strings.Split(data_processed, ",")
-			data = new_data_list 
-		
-		// TO serve a single item
-		}else if !strings.Contains(strings.Join(args, ""), ","){
-			
-			data = append(data, strings.Join(args, " "))
+		// Creating the CSV file (if doesn't exist)
+		path, _ := creator.CreateFile()
 
-		}
+		// Open file / Close File
+		file, err := os.OpenFile(path, os.O_WRONLY | os.O_APPEND, 0644)
 
-		// Create file if doesn't exist
-		if _, err := os.Stat("./test.txt"); err != nil {
-			
-			// Create txt for task storage
-			os.Create("./test.txt")
-			
-			// Open file for change
-			file, _ := os.OpenFile("./test.txt", os.O_APPEND | os.O_CREATE | os.O_WRONLY, 0644)
-			
-			// Add task interface header
-			file.WriteString(fmt.Sprintf(`
-	╔════════════════════╗
-	║    TASK MANAGER    ║
-	╚════════════════════╝
-══════════════════════════════════════
-			`))
-			file.WriteString("\n")
-		
-			// Close file
-			file.Close()
-
-		}
-
-		// Open file
-		file, err := os.OpenFile("./test.txt", os.O_APPEND | os.O_CREATE | os.O_WRONLY, 0644)
-		
-		// Close after func
 		defer file.Close()
 
-		// Error handling for file creation
 		if err != nil {
-			fmt.Println("Failed to create file")
-			return
+			fmt.Println("Something went wrong reading the file, please try again")
+			return 
 		}
-		
-		// Write todo's to file
-		for _, value := range data{
-			_, err := file.WriteString(fmt.Sprintf("- %v \n", value)) 
-			
-			if err != nil {
-				fmt.Println("Something went wrong please try again.")
-				return
-			}
 
+		// TODO: To track task number, you can read last latest in list, and then start relatively from that count.
+		// - Edge case: if there are no prior item (i.e. You use multiple add first) then you should check for that.
+		
+		writer := csv.NewWriter(file)
+
+		records := make([][]string, 0)
+
+		for _, value := range processed_data{
+			records = append(records, []string{"1", value, "completed!!!"})
 		}
+
+		err = writer.WriteAll(records)		
 
 		fmt.Println("Task(s) added")
-
-		// Close file (defer)
 		return 
 
 	},

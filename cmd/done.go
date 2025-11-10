@@ -2,8 +2,13 @@ package cmd
 
 import (
 	"fmt"
-
+	filetool "github.com/wangj000/task/utils"
 	"github.com/spf13/cobra"
+	"path/filepath"	
+	"encoding/csv"
+	"io"
+	"os"
+	"strconv"
 )
 
 // doneCmd represents the done command
@@ -16,8 +21,56 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("done called")
+	Run: func(cmd *cobra.Command, args []string){
+
+		count, err := filetool.GetLatestCount()	
+		if err != nil{
+			fmt.Println("%v", err)
+			return
+		}
+		
+		path := filepath.Join("internal", "todos.csv")
+
+		file, err := os.Open(path)				
+		if _, err := os.Stat(path); err != nil {
+			fmt.Println("%v", err)
+			return
+		}
+		defer file.Close()
+		
+		reader := csv.NewReader(file)
+		cur_data := make([][]string, 0)	
+
+		for {
+
+			record, err := reader.Read()
+
+			if err == io.EOF{
+				break
+			}
+
+			if err != nil {
+				fmt.Println("Something went wrong in done.go")
+				return
+			}
+
+			cur_data = append(cur_data, record)
+
+		}
+		
+		writer := csv.NewWriter(file)
+		count, err = filetool.GetLatestCount()
+
+		for _, value := range cur_data{
+			count += 1
+			value[0] = strconv.Itoa(count) 
+		}
+
+		err = writer.WriteAll(cur_data)		
+		fmt.Println(count)
+		fmt.Println(cur_data)
+		return
+
 	},
 }
 

@@ -3,9 +3,9 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	creator "github.com/wangj000/task/internal"
+	filetool "github.com/wangj000/task/utils"
 	"strings"
-	// "strconv"
+	"strconv"
 	"os"
 	"encoding/csv"
 )
@@ -23,7 +23,7 @@ var addCmd = &cobra.Command{
 		processed_data := strings.Split(processed_string, ",")
 
 		// Creating the CSV file (if doesn't exist)
-		path, _ := creator.CreateFile()
+		path, _ := filetool.CreateFile()
 
 		// Open file / Close File
 		file, err := os.OpenFile(path, os.O_WRONLY | os.O_APPEND, 0644)
@@ -33,15 +33,14 @@ var addCmd = &cobra.Command{
 			return 
 		}
 
-		// TODO: To track task number, you can read last latest in list, and then start relatively from that count.
-		// - Edge case: if there are no prior item (i.e. You use multiple add first) then you should check for that.
-		
 		writer := csv.NewWriter(file)
 
 		records := make([][]string, 0)
+		count, err := filetool.GetLatestCount()
 
 		for _, value := range processed_data{
-			records = append(records, []string{"1", value, "completed!!!"})
+			count += 1
+			records = append(records, []string{strconv.Itoa(count), value, "completed!!!"})
 		}
 
 		err = writer.WriteAll(records)		

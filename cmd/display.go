@@ -31,7 +31,7 @@ var displayCmd = &cobra.Command{
 		}
 		defer file.Close()
 		
-		// BUG: I think the bug is triggering here, because something is going on with the reader
+		// Reading the file line by line
 		reader := csv.NewReader(file)
 		for {
 

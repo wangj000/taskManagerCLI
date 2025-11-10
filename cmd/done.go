@@ -29,6 +29,7 @@ to quickly create a Cobra application.`,
 		cur_data, err := filetool.FilterTasks(nums_del)
 		if err != nil{
 			fmt.Println("Something went wrong filtering the tasks.")	
+			fmt.Println(err)
 			return
 		}
 
@@ -67,8 +68,8 @@ to quickly create a Cobra application.`,
 		if err != nil{
 			fmt.Println("Something went wrong writing to the file")
 		}
-			
-		fmt.Println(cur_data)
+		
+		// Close file
 		return
 
 	},

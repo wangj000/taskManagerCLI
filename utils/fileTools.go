@@ -101,6 +101,7 @@ func FilterTasks(ignoreTasks []string) ([][]string, error){
 
 	remainingTasks := make([][]string, 0)
 	
+	// FIX: For some reason when there is only one item in the list, it isn't appending it to remainingTasks
 	for r := 1; r < len(records); r++ {
 
 		if !slices.Contains(ignoreTasks, records[r][0]){
@@ -109,12 +110,9 @@ func FilterTasks(ignoreTasks []string) ([][]string, error){
 
 	} 
 
-	fmt.Println(remainingTasks)
-	
 	if len(remainingTasks) > 0{
 		return remainingTasks, nil
 	}
 
-	return nil, errors.New("No tasks remaining")	
-
+	return remainingTasks, nil 
 }

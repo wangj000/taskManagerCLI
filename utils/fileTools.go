@@ -8,6 +8,7 @@ import (
 	"io"
 	"path/filepath"	
 	"strconv"
+	"slices"
 )
 
 func CreateFile() (string, error) {
@@ -81,7 +82,39 @@ func GetLatestCount() (int, error){
 
 }
 
-// TODO: THIS IS WHERE I LEFT OFF 
-// func GetSiftCount() (int, error){
-//
-// }
+func FilterTasks(ignoreTasks []string) ([][]string, error){
+	
+	path := filepath.Join("internal", "todos.csv")
+
+	file, err := os.Open(path)
+	if err != nil{
+		return nil, errors.New("The file doesn't exist")
+	}
+	defer file.Close()
+
+	reader := csv.NewReader(file)
+	records, err := reader.ReadAll()
+
+	if err != nil {
+		return nil, errors.New("Something went wrong with reading the file")
+	}
+
+	remainingTasks := make([][]string, 0)
+	
+	for r := 1; r < len(records); r++ {
+
+		if !slices.Contains(ignoreTasks, records[r][0]){
+			remainingTasks = append(remainingTasks, records[r])
+	 	}
+
+	} 
+
+	fmt.Println(remainingTasks)
+	
+	if len(remainingTasks) > 0{
+		return remainingTasks, nil
+	}
+
+	return nil, errors.New("No tasks remaining")	
+
+}

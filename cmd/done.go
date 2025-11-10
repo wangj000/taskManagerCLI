@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 	"path/filepath"	
 	"encoding/csv"
-	"io"
 	"os"
 	"strconv"
 )
@@ -22,52 +21,53 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string){
+			
+		nums_del := args
 
-		count, err := filetool.GetLatestCount()	
+		path := filepath.Join("internal", "todos.csv")
+		
+		cur_data, err := filetool.FilterTasks(nums_del)
 		if err != nil{
-			fmt.Println("%v", err)
+			fmt.Println("Something went wrong filtering the tasks.")	
 			return
 		}
-		
-		path := filepath.Join("internal", "todos.csv")
 
-		file, err := os.Open(path)				
+		count	:= 0	
+		for i := 0 ; i < len(cur_data); i++ {
+			count += 1
+			cur_data[i][0] = strconv.Itoa(count)
+		}
+
+		err = os.Remove(path)	
+		if err != nil {
+			fmt.Println("Something went wrong removing the file when trying to rewrite")
+			return
+		}
+
+		_, err = filetool.CreateFile()
+		if err != nil {
+			fmt.Println("Something went wrong trying to recreate the file when trying to rewrite")
+		}
+		
+		file, err := os.OpenFile(path, os.O_WRONLY | os.O_APPEND, 0644)
+		if err != nil {
+			fmt.Println("Something went wrong opening the file")
+			return
+		}
+
 		if _, err := os.Stat(path); err != nil {
 			fmt.Println("%v", err)
 			return
 		}
 		defer file.Close()
-		
-		reader := csv.NewReader(file)
-		cur_data := make([][]string, 0)	
 
-		for {
-
-			record, err := reader.Read()
-
-			if err == io.EOF{
-				break
-			}
-
-			if err != nil {
-				fmt.Println("Something went wrong in done.go")
-				return
-			}
-
-			cur_data = append(cur_data, record)
-
-		}
-		
 		writer := csv.NewWriter(file)
-		count, err = filetool.GetLatestCount()
-
-		for _, value := range cur_data{
-			count += 1
-			value[0] = strconv.Itoa(count) 
-		}
 
 		err = writer.WriteAll(cur_data)		
-		fmt.Println(count)
+		if err != nil{
+			fmt.Println("Something went wrong writing to the file")
+		}
+			
 		fmt.Println(cur_data)
 		return
 

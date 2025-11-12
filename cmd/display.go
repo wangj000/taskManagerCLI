@@ -92,7 +92,7 @@ var displayCmd = &cobra.Command{
 								return oddRowStyle
 						}
 				}).
-				Headers("ID", "Name", "Description","Status").
+				Headers("ID", "Name", "Description","Completed").
 				Rows(rows...)
 
 		// You can also add tables row-by-row

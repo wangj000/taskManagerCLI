@@ -19,8 +19,8 @@ var addCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		
 		// Data processing
-		processed_string := strings.Join(args, "")
-		processed_data := strings.Split(processed_string, ",")
+		processed_string := strings.Join(args, " ")
+		processed_data := strings.Split(processed_string, ", ")
 
 		// Creating the CSV file (if doesn't exist)
 		path, _ := filetool.CreateFile()
@@ -40,7 +40,7 @@ var addCmd = &cobra.Command{
 
 		for _, value := range processed_data{
 			count += 1
-			records = append(records, []string{strconv.Itoa(count), value, "completed!!!"})
+			records = append(records, []string{strconv.Itoa(count), value, "something i gotta do ", "false"})
 		}
 
 		err = writer.WriteAll(records)		

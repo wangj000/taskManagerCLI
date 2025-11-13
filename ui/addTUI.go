@@ -25,7 +25,7 @@ func AddTUI() Model{
 	// Initializes the internal UI buffer 
 	ti := textinput.New()
 	ti.TextStyle = focusedStyle
-	ti.Placeholder = "Need to buy fruits" 
+	ti.Placeholder = "finish Math HW" 
 	ti.Focus()
 	ti.CharLimit = 156;
 	ti.Width = 20;
@@ -63,6 +63,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd){
 			if m.q_index >= len(m.questions){
 				return m, tea.Quit
 			}
+
+			m.ti.Placeholder = "currently on question 8"
 
 			// Deletes the internal text buffer by setting it to ""
 			m.ti.SetValue("")

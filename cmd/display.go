@@ -59,18 +59,22 @@ var displayCmd = &cobra.Command{
 		}
 			
 		var (
-			purple    = lipgloss.Color("153")
+			// purple    = lipgloss.Color("153")
 			gray      = lipgloss.Color("245")
 			lightGray = lipgloss.Color("153")
 
-			headerStyle  = lipgloss.NewStyle().
-				Foreground(purple).
-				Bold(true).
-				Align(lipgloss.Center)
+			// smallCol = lipgloss.NewStyle().Width(20)
+			// mediumCol = lipgloss.NewStyle().Width(20)
+			// largeCol = lipgloss.NewStyle().Width(30)
+
+			// headerStyle  = lipgloss.NewStyle().
+			// 	Foreground(purple).
+			// 	Bold(true).
+			// 	Align(lipgloss.Center)
 
 			cellStyle    = lipgloss.NewStyle().
 				Padding(0, 1).
-				Width(30).
+				Width(20).
 				BorderTop(false).      
 				BorderBottom(false).   
 				BorderLeft(true).      
@@ -83,14 +87,32 @@ var displayCmd = &cobra.Command{
 				Border(lipgloss.NormalBorder()).
 				BorderStyle(lipgloss.NewStyle().Foreground(lightGray)).
 				StyleFunc(func(row, col int) lipgloss.Style {
-						switch {
-						case row == table.HeaderRow:
-								return headerStyle
-						case row%2 == 0:
-								return evenRowStyle
+		
+					var base lipgloss.Style
+
+					// Styling for table rows
+						switch row {
+						case 2, 4:
+							base = evenRowStyle
 						default:
-								return oddRowStyle
+							base = oddRowStyle
 						}
+
+					// Styling for table columns
+						switch col{
+						case 0: 
+							return base.Copy().Width(5).Align(lipgloss.Center)
+						case 1:
+							return base.Copy().Width(30).Align(lipgloss.Center)
+						case 2:
+							return base.Copy().Width(40).Align(lipgloss.Center)
+						case 3:
+							return base.Copy().Width(10).Align(lipgloss.Center) 
+						default:
+							return base					
+						}
+
+
 				}).
 				Headers("ID", "Name", "Description","Completed").
 				Rows(rows...)

@@ -61,7 +61,9 @@ func GetLatestCount() (int, error){
 			}
 
 		}
-
+		
+		// Increment by one from the latest count
+		prevCount += 1
 		return prevCount, nil
 
 }

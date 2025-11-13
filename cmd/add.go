@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	filetool "github.com/wangj000/task/utils"
-	"strings"
 	"strconv"
 	"os"
 	"encoding/csv"
+	ui "github.com/wangj000/task/ui"
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 var addCmd = &cobra.Command{
@@ -18,9 +19,19 @@ var addCmd = &cobra.Command{
 	Long: `Append item to current list`,
 	Run: func(cmd *cobra.Command, args []string) {
 		
-		// Data processing
-		processed_string := strings.Join(args, " ")
-		processed_data := strings.Split(processed_string, ", ")
+		// Initializes the new TUI cycle instance
+		addTUI := tea.NewProgram(ui.AddTUI())	
+
+		// finalModel is the last instance of the model 
+		// struct after cycle terminates
+		finalModel, err := addTUI.Run()
+
+		if err != nil{
+			fmt.Println("Something went wrong with the TUI")
+			return
+		}
+		
+		m := finalModel.(ui.Model)
 
 		// Creating the CSV file (if doesn't exist)
 		path, _ := filetool.CreateFile()
@@ -37,11 +48,7 @@ var addCmd = &cobra.Command{
 
 		records := make([][]string, 0)
 		count, err := filetool.GetLatestCount()
-
-		for _, value := range processed_data{
-			count += 1
-			records = append(records, []string{strconv.Itoa(count), value, "something i gotta do ", "false"})
-		}
+		records = append(records, []string{strconv.Itoa(count), m.Answers["Task Name"], m.Answers["Description"], "false"})
 
 		err = writer.WriteAll(records)		
 		fmt.Println("Task(s) added")

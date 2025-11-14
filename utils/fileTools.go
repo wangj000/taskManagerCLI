@@ -18,6 +18,26 @@ func CreateFile() (string, error) {
 		
 		if err != nil{
 			os.Create(path)	
+
+			// file, err := os.OpenFile(path, os.O_WRONLY | os.O_APPEND, 0644)
+			// defer file.Close()
+			// if err != nil {
+			// 	fmt.Println("Something went wrong reading the file, please try again")
+			// 	return "", err
+			// }
+			//
+			// writer := csv.NewWriter(file)
+			// records := [][]string{
+			// 	{"ID", "NAME", "DESCRIPTION", "COMPLETED"},
+			// }
+			//
+			// err = writer.WriteAll(records)
+			//
+			// if err != nil{
+			// 	fmt.Println("Something went wrong adding the headers to the new file")
+			// 	return "", err
+			// }
+
 		}
 
 		return path, nil
@@ -87,8 +107,7 @@ func FilterTasks(ignoreTasks []string) ([][]string, error){
 
 	remainingTasks := make([][]string, 0)
 	
-	// FIX: For some reason when there is only one item in the list, it isn't appending it to remainingTasks
-	for r := 1; r < len(records); r++ {
+	for r := 0; r < len(records); r++ {
 
 		if !slices.Contains(ignoreTasks, records[r][0]){
 			remainingTasks = append(remainingTasks, records[r])

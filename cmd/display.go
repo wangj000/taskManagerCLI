@@ -59,7 +59,8 @@ var displayCmd = &cobra.Command{
 		}
 			
 		var (
-			// purple    = lipgloss.Color("153")
+
+			purple    = lipgloss.Color("153")
 			gray      = lipgloss.Color("245")
 			lightGray = lipgloss.Color("153")
 
@@ -67,10 +68,10 @@ var displayCmd = &cobra.Command{
 			// mediumCol = lipgloss.NewStyle().Width(20)
 			// largeCol = lipgloss.NewStyle().Width(30)
 
-			// headerStyle  = lipgloss.NewStyle().
-			// 	Foreground(purple).
-			// 	Bold(true).
-			// 	Align(lipgloss.Center)
+			headerStyle  = lipgloss.NewStyle().
+				Foreground(purple).
+				Bold(true).
+				Align(lipgloss.Center)
 
 			cellStyle    = lipgloss.NewStyle().
 				Padding(0, 1).
@@ -84,6 +85,7 @@ var displayCmd = &cobra.Command{
 		)
 
 		t := table.New().
+
 				Border(lipgloss.NormalBorder()).
 				BorderStyle(lipgloss.NewStyle().Foreground(lightGray)).
 				StyleFunc(func(row, col int) lipgloss.Style {
@@ -92,6 +94,8 @@ var displayCmd = &cobra.Command{
 
 					// Styling for table rows
 						switch row {
+						case 0:
+							base = headerStyle
 						case 2, 4:
 							base = evenRowStyle
 						default:
@@ -114,7 +118,7 @@ var displayCmd = &cobra.Command{
 
 
 				}).
-				Headers("ID", "Name", "Description","Completed").
+				Headers("ID", "NAME", "DESCRIPTION", "STATUS").
 				Rows(rows...)
 
 		// You can also add tables row-by-row

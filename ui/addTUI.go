@@ -1,4 +1,4 @@
-package addTUI
+package ui 
 
 import (
 	"fmt"
@@ -13,14 +13,14 @@ var (
 	textStyle = focusedStyle
 )
 
-type Model struct {
+type AddModel struct {
 	ti textinput.Model
 	questions []string
 	q_index int 
 	Answers map[string]string
 }
 
-func AddTUI() Model{
+func AddTUI() AddModel{
 	
 	// Initializes the internal UI buffer 
 	ti := textinput.New()
@@ -30,7 +30,7 @@ func AddTUI() Model{
 	ti.CharLimit = 156;
 	ti.Width = 20;
 
-	return Model {
+	return AddModel {
 		ti: ti,
 		questions: []string{"Task Name", "Description"},
 		q_index: 0,
@@ -39,11 +39,11 @@ func AddTUI() Model{
 
 }
 
-func (m Model) Init() tea.Cmd {
+func (m AddModel) Init() tea.Cmd {
 	return textinput.Blink
 }
 
-func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd){
+func (m AddModel) Update(msg tea.Msg) (tea.Model, tea.Cmd){
 
 	var cmd tea.Cmd
 
@@ -80,7 +80,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd){
 
 }
 
-func (m Model) View() string {
+func (m AddModel) View() string {
 
 	if m.q_index >= len(m.questions){
 		return "DONE"

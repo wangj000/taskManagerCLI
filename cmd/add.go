@@ -31,7 +31,7 @@ var addCmd = &cobra.Command{
 			return
 		}
 		
-		m := finalModel.(ui.Model)
+		m := finalModel.(ui.AddModel)
 
 		// Creating the CSV file (if doesn't exist)
 		path, _ := filetool.CreateFile()

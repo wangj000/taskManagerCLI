@@ -8,6 +8,9 @@ import (
 	"encoding/csv"
 	"os"
 	"strconv"
+	"strings"
+	ui "github.com/wangj000/task/ui"
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 // doneCmd represents the done command
@@ -21,12 +24,26 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string){
-			
-		nums_del := args
 
-		path := filepath.Join("internal", "todos.csv")
+		// Initializes the new TUI cycle instance
+		doneTUI := tea.NewProgram(ui.DoneTUI())	
+
+		// finalModel is the last instance of the model 
+		// struct after cycle terminates
+		finalModel, err := doneTUI.Run()
+		if err != nil{
+			fmt.Println("Something went wrong with the TUI")
+			return
+		}
 		
-		cur_data, err := filetool.FilterTasks(nums_del)
+		m := finalModel.(ui.DoneModel)
+		path := filepath.Join("internal", "todos.csv")
+
+		del_data := strings.Split(m.Answers, "")
+
+		fmt.Println(del_data)
+		
+		cur_data, err := filetool.FilterTasks(del_data)
 		if err != nil{
 			fmt.Println("Something went wrong filtering the tasks.")	
 			fmt.Println(err)

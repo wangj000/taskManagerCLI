@@ -17,6 +17,13 @@ var displayCmd = &cobra.Command{
 	Long: `displays current tasks`,
 	Run: func(cmd *cobra.Command, args []string) {
 		
+	
+		// NOTE: These paths don't work outside of project dir, so you have to 
+		// place the CLI in the global go dir where the executable is
+		
+		// TODO: Figure out why the relative filepath wasn't working (just to learn why)
+
+		// Build path to resource
 		path := filepath.Join("internal", "todos.csv")
 
 		// Checks if file exists
@@ -63,10 +70,6 @@ var displayCmd = &cobra.Command{
 			purple    = lipgloss.Color("153")
 			gray      = lipgloss.Color("245")
 			lightGray = lipgloss.Color("153")
-
-			// smallCol = lipgloss.NewStyle().Width(20)
-			// mediumCol = lipgloss.NewStyle().Width(20)
-			// largeCol = lipgloss.NewStyle().Width(30)
 
 			headerStyle  = lipgloss.NewStyle().
 				Foreground(purple).
@@ -124,7 +127,6 @@ var displayCmd = &cobra.Command{
 		// You can also add tables row-by-row
 		
 		fmt.Println(t)
-
 		return 
 
 	},

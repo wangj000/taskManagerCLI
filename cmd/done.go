@@ -40,8 +40,6 @@ to quickly create a Cobra application.`,
 		path := filepath.Join("internal", "todos.csv")
 
 		del_data := strings.Split(m.Answers, "")
-
-		fmt.Println(del_data)
 		
 		cur_data, err := filetool.FilterTasks(del_data)
 		if err != nil{

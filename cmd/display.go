@@ -56,12 +56,7 @@ var displayCmd = &cobra.Command{
 				return
 			}
 			
-			row_items := make([]string, 0)
-			for _, item := range record {
-				row_items = append(row_items, item)
-			}
-
-			rows = append(rows, row_items)
+			rows = append(rows, record)
 
 		}
 			

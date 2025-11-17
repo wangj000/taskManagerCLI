@@ -16,12 +16,6 @@ var displayCmd = &cobra.Command{
 	Short: "displays current tasks",
 	Long: `displays current tasks`,
 	Run: func(cmd *cobra.Command, args []string) {
-		
-	
-		// NOTE: These paths don't work outside of project dir, so you have to 
-		// place the CLI in the global go dir where the executable is
-		
-		// TODO: Figure out why the relative filepath wasn't working (just to learn why)
 
 		// Build path to resource
 		path := filepath.Join("internal", "todos.csv")
@@ -52,7 +46,7 @@ var displayCmd = &cobra.Command{
 			}
 
 			if err != nil {
-				fmt.Printf("%v second print - Something went wrong reading the file, please try again", err)
+				fmt.Printf("%v Something went wrong reading the file, please try again", err)
 				return
 			}
 			
@@ -121,7 +115,13 @@ var displayCmd = &cobra.Command{
 
 		// You can also add tables row-by-row
 		
-		fmt.Println(t)
+		fileInfo, _ := os.Stat(path)
+		if fileInfo.Size() > 0 {
+			fmt.Println(t)
+		}else{
+			fmt.Println("No tasks avaliable")
+		}
+
 		return 
 
 	},

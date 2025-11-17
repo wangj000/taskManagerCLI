@@ -82,6 +82,7 @@ to quickly create a Cobra application.`,
 		err = writer.WriteAll(cur_data)		
 		if err != nil{
 			fmt.Println("Something went wrong writing to the file")
+			return
 		}
 		
 		// Close file

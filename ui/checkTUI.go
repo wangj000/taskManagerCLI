@@ -21,7 +21,7 @@ type CheckModel struct {
 func CheckTUI() CheckModel {
 
 	ti := textinput.New()
-	ti.TextStyle = DonefocusedStyle
+	ti.TextStyle = CheckfocusedStyle 
 	ti.Placeholder = "ex. 2"
 	ti.Focus()
 	ti.CharLimit = 3
@@ -58,6 +58,6 @@ func (m CheckModel) Update(msg tea.Msg) (tea.Model, tea.Cmd){
 
 func (m CheckModel) View() string {
 
-		return fmt.Sprintf("Task ID\n%v\n\n (press Enter to checkoff", m.ti.View())
+		return fmt.Sprintf("%v\n%v\n\n(press Enter to check)", CheckfocusedStyle.Render("TASK ID"), m.ti.View())
 
 }

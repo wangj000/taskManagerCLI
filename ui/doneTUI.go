@@ -63,7 +63,7 @@ func DoneTUI() DoneModel {
 
 	func (m DoneModel) View() string {
 		
-		return fmt.Sprintf("Task ID\n%v\n\n (press Enter to delete", m.ti.View())
+		return fmt.Sprintf("%v\n%v\n\n(press Enter to delete", DonefocusedStyle.Render("TASK ID"), m.ti.View())  
 
 	}
 

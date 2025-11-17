@@ -3,8 +3,8 @@ package ui
 import (
 	"fmt"
 	"github.com/charmbracelet/bubbles/textinput"
-	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 var (
@@ -73,8 +73,7 @@ func (m AddModel) Update(msg tea.Msg) (tea.Model, tea.Cmd){
 
 	}
 	
-	// Updates the current interface depending on input
-	// Note: msg is a rune slice that stores key inputs ( ex. []rune{'a', 'b', 'c'} ) 
+	// I/O TUI Updating (msg is a rune slice that store key inputs []rune{'a', 'b', 'c'})
 	m.ti, cmd = m.ti.Update(msg)
 	return m, cmd 
 

@@ -5,7 +5,6 @@ import (
 	"github.com/spf13/cobra"
 	"path/filepath"
 	"os"
-	// "io"
 	"encoding/csv"
 	ui "github.com/wangj000/task/ui"
 	tea "github.com/charmbracelet/bubbletea"
@@ -13,20 +12,16 @@ import (
 
 var checkCmd = &cobra.Command{
 	Use:   "check",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "To mark items as completed",
+	Long: `Used to change the status of items in the list. For example
+	if you do 'task check' and then put in the task ID as prompted
+	by the TUI you can change the status to 'true'`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		// Initializes the new TUI cycle instance
+		// Intializes new program instance
 		checkTUI := tea.NewProgram(ui.CheckTUI())	
 
-		// finalModel is the last instance of the model 
-		// struct after cycle terminates
+		// The latest struct post program termination
 		finalModel, err := checkTUI.Run()
 		if err != nil{
 			fmt.Println("Something went wrong with the TUI")
@@ -37,7 +32,6 @@ to quickly create a Cobra application.`,
 
 		// Build the path to the resource
 		path := filepath.Join("internal", "todos.csv")
-
 		if _, err := os.Stat(path); err != nil {
 			fmt.Println("There are no items to to check off")
 			return
@@ -73,7 +67,7 @@ to quickly create a Cobra application.`,
 		}
 		defer file.Close()
 
-		// Create and writes to the file
+		// Create + writes to file
 		writer := csv.NewWriter(file)
 		err = writer.WriteAll(data)		
 		if err != nil{
@@ -86,7 +80,5 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
-
 	rootCmd.AddCommand(checkCmd)
-
 }

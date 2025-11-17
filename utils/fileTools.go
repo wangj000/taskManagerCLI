@@ -11,6 +11,7 @@ import (
 	"slices"
 )
 
+// To create the CSV file
 func CreateFile() (string, error) {
 		
 		path := filepath.Join("internal", "todos.csv")
@@ -18,32 +19,13 @@ func CreateFile() (string, error) {
 		
 		if err != nil{
 			os.Create(path)	
-
-			// file, err := os.OpenFile(path, os.O_WRONLY | os.O_APPEND, 0644)
-			// defer file.Close()
-			// if err != nil {
-			// 	fmt.Println("Something went wrong reading the file, please try again")
-			// 	return "", err
-			// }
-			//
-			// writer := csv.NewWriter(file)
-			// records := [][]string{
-			// 	{"ID", "NAME", "DESCRIPTION", "COMPLETED"},
-			// }
-			//
-			// err = writer.WriteAll(records)
-			//
-			// if err != nil{
-			// 	fmt.Println("Something went wrong adding the headers to the new file")
-			// 	return "", err
-			// }
-
 		}
 
 		return path, nil
 
 }
 
+// To get the last count item in the CSV 
 func GetLatestCount() (int, error){
 
 		path := filepath.Join("internal", "todos.csv")
@@ -88,6 +70,8 @@ func GetLatestCount() (int, error){
 
 }
 
+// To filter tasks by taking in a slice of numbers and rebuilding 
+// a array excluding the ones in the input parameter
 func FilterTasks(ignoreTasks []string) ([][]string, error){
 	
 	path := filepath.Join("internal", "todos.csv")

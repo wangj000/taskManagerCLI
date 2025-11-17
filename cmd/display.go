@@ -13,8 +13,8 @@ import (
 
 var displayCmd = &cobra.Command{
 	Use:   "display",
-	Short: "displays current tasks",
-	Long: `displays current tasks`,
+	Short: "To display all items in the table",
+	Long: `To display all contents of the table using 'task display'`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		// Build path to resource
@@ -112,9 +112,8 @@ var displayCmd = &cobra.Command{
 				}).
 				Headers("ID", "NAME", "DESCRIPTION", "STATUS").
 				Rows(rows...)
-
-		// You can also add tables row-by-row
 		
+		// To check if the CSV is empty before rendering table 
 		fileInfo, _ := os.Stat(path)
 		if fileInfo.Size() > 0 {
 			fmt.Println(t)
@@ -129,14 +128,4 @@ var displayCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(displayCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// displayCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// displayCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

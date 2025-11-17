@@ -3,8 +3,8 @@ package ui
 import (
 	"fmt"
 	"github.com/charmbracelet/bubbles/textinput"
-	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 var (
@@ -42,6 +42,7 @@ func (m CheckModel) Update(msg tea.Msg) (tea.Model, tea.Cmd){
 
 	var cmd tea.Cmd
 
+	// I/O logic for key inputs
 	switch msg := msg.(type){
 		case tea.KeyMsg:
 			switch msg.Type {
@@ -51,13 +52,12 @@ func (m CheckModel) Update(msg tea.Msg) (tea.Model, tea.Cmd){
 			}
 	}
 
+	// Updates TUI per I/O
 	m.ti, cmd = m.ti.Update(msg)
 	return m, cmd
 
 }
 
 func (m CheckModel) View() string {
-
 		return fmt.Sprintf("%v\n%v\n\n(press Enter to check)", CheckfocusedStyle.Render("TASK ID"), m.ti.View())
-
 }

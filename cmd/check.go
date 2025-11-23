@@ -22,7 +22,7 @@ var checkCmd = &cobra.Command{
 		checkTUI := tea.NewProgram(ui.CheckTUI())	
 
 		// The latest struct post program termination
-		finalModel, err := checkTUI.Run()
+		inalModel, err := checkTUI.Run()
 		if err != nil{
 			fmt.Println("Something went wrong with the TUI")
 			return
@@ -74,7 +74,7 @@ var checkCmd = &cobra.Command{
 			fmt.Println("Something went wrong writing to the file")
 		}
 
-		return
+		   return
 
 	},
 }
